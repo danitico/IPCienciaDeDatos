@@ -1,0 +1,84 @@
+---
+title: "Introducción a R"
+output: html_notebook
+---
+
+# R Interactivo
+
+## **Crea números del 1 a 30 usando el operador ":"**
+
+```{r}
+1:30
+```
+
+## **Busca en la ayuda que hace la función seq(). Crea una secuencia de números del 1 al 30 con un incremento de 0.5.**
+
+```{r}
+seq(from=1, to=30, by=0.5)
+```
+
+## **Lee los distintos argumentos que pueden utilizar la función seq() para saber que se puede hacer. Después crea una secuencia de 100 números, empezando en el numero 20 y con un incremento del 0.5**
+
+```{r}
+seq(from=20, by=0.5, length.out=100)
+```
+
+## **Investiga si existen vectores en R definidos para los siguientes casos: letras, minúsculas, letras mayúsculas, nombre de los meses del año y nombre de los meses del año abreviado**
+
+```{r}
+print('Minúsculas')
+letters
+print('Mayúsculas')
+LETTERS
+print('Meses')
+month.name
+print('Meses abreviados')
+month.abb
+```
+
+## **Investiga la función rep() con la ayuda. Crea una secuencia que contenga los valores del 1 al 8 repetidos cinco veces.**
+
+```{r}
+rep(1:8, each=5)
+```
+
+## **Crea una secuencia que contenga las cuatro primeras letras del abecedario 6 veces.**
+
+```{r}
+rep(letters[1:4], each=6)
+```
+
+# **Vectores y manipulación de vectores**
+
+## **Crea los siguientes vectores utilizando el comando c(): un vector del 1 al 20, un vector del 20 al 1 y un vector que tenga el siguiente patrón 1, 2, 3, ..., 19, 20, 19, 18, ..., 2, 1**
+
+```{r}
+c(1:20)
+c(20:1)
+c(1:20, 19:1)
+```
+
+## **Genera un vector x que contenga 9 números comprendidos entre 1 y 5**
+
+```{r}
+c(rep(1:5, length.out=9))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
