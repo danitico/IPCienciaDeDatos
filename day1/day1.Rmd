@@ -293,7 +293,6 @@ firstSetMonths[booleanVector]
 ## **Si x= month.name[1:4] e y= month.name[3:7] recupera los valores únicos en el primer vector. Para ello investiga la función diff(). ¿Es posible usar diff() con caracteres?. Busca una alternativa. Pista: busca funciones que contengan diff en el nombre. Comprueba si importa el orden en el que se pongan los vectores en la función.**
 
 
-
 ```{r}
 # Non numeric argument to binary operator
 diff(c(firstSetMonths, secondSetMonths))
@@ -303,5 +302,21 @@ setdiff(firstSetMonths, secondSetMonths)
 
 # Devuelve los valores diferentes del segundo vector
 setdiff(secondSetMonths, firstSetMonths)
+```
+
+
+## **Une dos vectores sin duplicar las entradas repetidas en uno nuevo llamado x. Investiga la función unión()**
+
+```{r}
+x <- union(firstSetMonths, secondSetMonths)
+```
+
+## **Recupera las entradas duplicadas de x**
+
+```{r}
+diff1 <- setdiff(x, firstSetMonths)
+diff2 <- setdiff(x, secondSetMonths)
+x[-diff1]
+
 ```
 
