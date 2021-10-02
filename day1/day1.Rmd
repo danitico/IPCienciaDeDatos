@@ -294,7 +294,7 @@ firstSetMonths[booleanVector]
 
 
 ```{r}
-# Non numeric argument to binary operator
+# Non numeric argument to binary operator error
 diff(c(firstSetMonths, secondSetMonths))
 
 # Devuelve los valores diferentes del primer vector
@@ -314,9 +314,149 @@ x <- union(firstSetMonths, secondSetMonths)
 ## **Recupera las entradas duplicadas de x**
 
 ```{r}
-diff1 <- setdiff(x, firstSetMonths)
-diff2 <- setdiff(x, secondSetMonths)
-x[-diff1]
+intersect(firstSetMonths, secondSetMonths)
+```
+
+
+# **Filtrado de Vectores, subset(), which(), ifelse()**
+
+## R permite extraer elementos de un vector que satisfacen determinadas condiciones usando la función subset(), la diferencia entre esta función y el filtrado normal es como funciona con NA, subset() los elimina automáticamente del cálculo. Para el vector x <- c(6,1:3,NA,12)calcula los elementos mayores que 5 en x usando primero el filtrado normal es decir con el operador “>” y luego la función subset(). ¿Se obtiene el mismo resultado?
+
+```{r}
+x <- c(6, 1:3, NA, 12)
+
+# filtrado con el operador >. Devuelve los valores mayores que 5 y con el valor NA
+x[x > 5]
+
+# Filtrado con la función subset. Subset elimina los NA "For ordinary vectors, the result is simply x[subset & !is.na(subset)]"
+subset(x, x > 5)
 
 ```
+
+## **R permite extraer encontrar las posiciones en las que se encuentran los elementos que cumplen una determinada condición con which(). Utiliza esta función para encontrar dado el vector z, las posiciones donde el cuadrado de z sea mayor que 8**
+
+```{r}
+z <- c(1, 2, 3, 4, 5)
+
+which(z**2 > 8)
+```
+
+## **En R aparte de encontrarse los típicos bucles if-then-else existe la función ifelse(). Ifelse funciona de la siguiente manera (ver ejemplo). Para un vector x devuelve 5 para aquellos números que sean pares (módulo igual a 0) y 12 para los números impares.**
+
+```{r}
+y <- c(1:4)
+
+ifelse(y %% 2 == 0, 5, 12)
+
+```
+
+## **Práctica ahora para el vector x <- c(5,2,9,12) y crea un código que devuelva el doble de x si el valor de x es mayor que 6 y el triple si no lo es.**
+
+```{r}
+x <- c(5,2,9,12)
+
+ifelse(x > 6, x*2, x*3)
+
+```
+
+# Matrices
+
+## **Ejecuta los siguientes comandos y observa que pasa**
+
+```{r}
+
+# Se creará un matriz de 2x2 con cincos
+matrix(data=5, nr=2, nc=2)
+
+# Se creará una matriz 2x3 que se rellena con la secuencia 1:6(1, 2, 3, 4, 5, 6) por columnas
+matrix(1:6, 2, 3)
+
+# Se creará una matriz 2x3 que se rellena con la secuencia 1:6(1, 2, 3, 4, 5, 6) por filas
+matrix(1:6, 2, 3, byrow = T)
+```
+
+## **Crea un vector z con los 30 primeros números y crea con el una matriz M con 3 filas y 10 columnas. Extrae la tercera columna de M en un vector**
+
+```{r}
+z <- c(1:30)
+
+M <- matrix(z, 3, 10)
+
+thirdRow <- M[3,]
+thirdRow
+```
+
+
+## **calcula los efectos de los siguientes comandos sobre la anterior matriz**
+
+```{r}
+# Devuelve la primera fila
+M[1, ]
+
+# Devuelve la segunda fila
+M[2,]
+
+# Devuelve la segunda columa
+M[,2]
+
+# Devuelve el elemento situado en la fila 1 y columna 2
+M[1, 2]
+
+# Devuelve la columna 2 y 3
+M[, 2:3]
+```
+
+## **Crea un array de 5 x 5 y rellénalo con valores del 1 al 25.**
+
+```{r}
+newArray <- array(1:25, c(5, 5))
+```
+
+## **Dadas las matrices  m1 y m2 usa rbind() y cbind() para crear matrices nuevas. ¿En que se diferencian las matrices creadas?**
+
+```{r}
+m1 <- matrix(1, nr = 2, nc = 2)
+m2 <- matrix(2, nr = 2, nc = 2)
+
+# Anexiona las dos matrices a nivel de fila
+rbind(m1, m2)
+
+# Anexiona las dos matrices a nivel de columna
+cbind(m1, m2)
+
+```
+
+## **El operador para el producto de dos matrices es ‘ %* %’. Por ejemplo, considerando las dos matrices creadas en el ejercicio anterior utilízalo.**
+
+```{r}
+newMatrix <- m1 %*% m2
+newMatrix
+```
+
+## **La transposición de una matriz se realiza con la función t; esta función también funciona con marcos de datos. Prueba con la matriz M del ejercicio anterior**
+
+```{r}
+t(M)
+```
+
+## **La función diag() se puede usar para extraer o modificar la diagonal de una matriz o para construir una matriz diagonal. Comprueba las diferencias entre los siguientes comandos.**
+
+```{r}
+# Crea una matriz de 3 filas y 5 columnas cuya diagonal principal está llena de 2.1
+diag(2.1, nr=3, nc=5)
+
+# Extrae la diagonal principal de la matriz resultante de la multiplación de dos matrices
+diag(rbind(m1, m2) %*% cbind(m1, m2))
+
+# Sustituye la diagonal de la matriz m1 por 10s
+diag(m1) <- 10
+
+# Crea una matriz identidad de 3 filas y 3 columnas
+diag(3)
+
+# Crea una matriz cuyo número de filas y columnas es la longitud del vector y su diagonal es el vector
+diag(c(10, 20, 30))
+```
+
+
 
