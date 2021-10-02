@@ -1,0 +1,251 @@
+---
+title: "Ejercicios día 2 dataframes"
+output: html_notebook
+---
+
+# Acceso y selección de secciones de un data frames
+
+## **Vamos a trabajar con un ejemplo que viene por defecto en la instalación de R USArrests. Este data frame contiene la información para cada estado Americano de las tasas de criminales (por 100.000 habitantes). Los datos de las columnas se refieren a Asesinatos, violaciones y porcentaje de la población que vive en áreas urbanas. Los datos son de 1973. Contesta a las siguientes preguntas sobre los datos**
+
+```{r}
+library(datasets)
+```
+
+
+**Las dimensiones del dataframe**
+
+```{r}
+dim(USArrests)
+```
+
+
+**La longitud del dataframe (filas o columnas)**
+
+```{r}
+dim(USArrests)
+```
+
+**Numero  de columnas**
+
+```{r}
+ncol(USArrests)
+```
+
+
+**¿Cómo calcularías el número de filas?**
+
+```{r}
+nrow(USArrests)
+```
+
+
+**Obtén el nombre de las filas y las columnas para este data frame**
+```{r}
+nrow(USArrests)
+ncol(USArrests)
+```
+
+
+**échale un vistazo a los datos, por ejemplo a las seis primeras filas**
+
+```{r}
+head(USArrests, n = 6)
+USArrests[1:6, ]
+```
+
+
+**Ordena de forma decreciente las filas de nuestro data frame según el porcentaje de población en el área urbana. Para ello investiga la función order () y sus parámetros.**
+
+```{r}
+USArrests[order(USArrests$UrbanPop, decreasing = TRUE),]
+```
+
+
+**¿Podrías añadir un segundo criterio de orden?, ¿cómo?**
+
+```{r}
+USArrests[order(USArrests$UrbanPop, USArrests$Murder, decreasing = TRUE),]
+```
+
+
+**Muestra por pantalla la columna con los datos de asesinato**
+
+```{r}
+USArrests$Murder
+```
+
+
+**Muestra las tasas de asesinato para el segundo, tercer y cuarto estado**
+
+```{r}
+print(USArrests$Murder[2:4])
+```
+
+
+**Muestra las primeras cinco filas de todas las columnas**
+
+```{r}
+print(USArrests[1:5,])
+```
+
+
+**Muestra todas las filas para las dos primeras columnas**
+
+```{r}
+print(USArrests[, 1:2])
+```
+
+**Muestra todas las filas de las columnas 1 y 3**
+
+```{r}
+print(USArrests[, c(1, 3)])
+```
+
+
+**Muestra solo las primeras cinco filas de las columnas 1 y 2**
+
+```{r}
+print(USArrests[1:5,1:2])
+```
+
+
+**Extrae las filas para el índice Murder**
+
+```{r}
+print(USArrests$Murder)
+```
+
+
+**¿Que estado tiene la menor tasa de asesinatos? ¿qué línea contiene esa información?, obtén esa información**
+
+```{r}
+x <- USArrests[which.min(USArrests$Murder),]
+x
+rownames(x)
+```
+
+
+**¿Que estados tienen una tasa inferior al 4%?, obtén esa información**
+
+```{r}
+rownames(USArrests[USArrests$Murder < 4,])
+```
+
+**¿Que estados estan en el cuartil superior (75) en lo que a poblacion en zonas urbanas se refiere?**
+
+```{r}
+rownames(USArrests[USArrests$UrbanPop >= quantile(USArrests$UrbanPop)[4],])
+```
+
+
+## **Carga el set de datos CO2 y realiza las siguientes acciones**
+
+```{r}
+CO2
+```
+
+
+**a) Ordena alfabéticamente los datos en función de la variable Plant. Recuerda que Plant es un factor. Imprime el resultado por pantalla para comprobarlo**
+
+```{r}
+CO2[order(as.vector(CO2$Plant)),]
+```
+
+
+**b) Ordena los datos en función del incremento de la variable uptake y el orden alfabético de la planta (en ese orden)**
+
+```{r}
+CO2[order(CO2$uptake, as.vector(CO2$Plant)),]
+```
+
+
+**c). Ordena de nuevo los datos en function del incremento de la variable uptake y el orden alfabético reverso de la planta (en ese orden)**
+
+```{r}
+CO2[order(CO2$uptake, rev(as.vector(CO2$Plant))),]
+```
+
+## **Para este ejercicio vamos a usar el dataset state.x77. Asegurate de que el objeto es un dataframe, si no lo es fuerza su conversión.**
+
+```{r}
+x77 <- as.data.frame(state.x77)
+```
+
+
+**a) Averigua cuantos estados tienen ingresos (Income) menores de 4300**
+
+```{r}
+subset(x77, x77$Income < 4300)
+```
+
+**Averigua cual es el estado con los ingresos mas altos.**
+
+```{r}
+x77[which.max(x77$Income), ]
+```
+
+
+**Crea un data frame 2 df2 con los datasets existentes en R: state.abb, state.area, state.division, state.name, state.region. Las filas tienen que ser los nombres de los estados.**
+
+```{r}
+df2 <- data.frame(state.name, state.abb, state.area, state.division, state.region, row.names = 1)
+df2
+```
+
+**Elimina de todas las variables la palabra state.**
+
+```{r}
+colnames(df2) <- gsub("state.", "", colnames(df2))
+```
+
+
+**Borra la variable division de df2. Estas borrando una única variable del dataframe**
+
+```{r}
+df2$division <- NULL
+```
+
+**Añade por columnas el nuevo dataframe df2 al dataframe state.x77. Elimina las variables Life Exp, HS Grad, Frost, abb, y area**
+
+```{r}
+newDataframe <- merge(x77, df2, by="row.names", all = T, row.names = 1)
+rownames(newDataframe) <- newDataframe$Row.names
+newDataframe[, c('Life Exp', 'HS Grad', 'Frost', 'abb', 'area', 'Row.names')] <- NULL
+```
+
+**Añade una variable que categorice el nivel de formacion (illiteracy) de manera que [0,1) is low, [1,2) is some, [2, inf) is high.**
+
+```{r}
+newDataframe$IlliteracyCat <- cut(newDataframe$Illiteracy, c(0, 1, 2, Inf), right = F)
+```
+
+**Encuentra que estado del oeste (west) tiene la formación mas baja y los mayors ingresos. ¿Que estado es?**
+
+```{r}
+westStates <- subset(newDataframe, newDataframe$region == "West")
+westStates[order(rev(westStates$Illiteracy), rev(westStates$Income))[1], ]
+
+```
+
+
+## **Vamos a trabajar con library(hflights). Inspecciona el dataframe y familiarízate con las variables**
+
+```{r}
+library(hflights)
+```
+
+
+**Busca todos los vuelos del 1 de enero**
+
+```{r}
+subset(hflights, hflights$Month == 1 & hflights$DayofMonth == 1)
+```
+
+
+**Busca los vuelos que están solo operados por American Airlines (AA) o por United Airlines (UA)**
+
+```{r}
+subset(hflights, hflights$UniqueCarrier %in% c('AA', 'UA'))
+```
+
+
