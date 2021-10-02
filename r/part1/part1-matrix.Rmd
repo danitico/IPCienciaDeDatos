@@ -102,6 +102,6 @@ newFile
 **b) Después crea un documento con los mismos datos pero en formato csv en vez de tab separated.**
 
 ```{r}
-write.csv(newFile, "array_datos.csv")
+write.csv(newFile, "array_datos.csv", row.names = F)
 ```
 
