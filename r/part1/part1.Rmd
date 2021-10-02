@@ -1,0 +1,462 @@
+---
+title: "Introducción a R"
+output: html_notebook
+---
+
+# R Interactivo
+
+## **Crea números del 1 a 30 usando el operador ":"**
+
+```{r}
+1:30
+```
+
+## **Busca en la ayuda que hace la función seq(). Crea una secuencia de números del 1 al 30 con un incremento de 0.5.**
+
+```{r}
+seq(from=1, to=30, by=0.5)
+```
+
+## **Lee los distintos argumentos que pueden utilizar la función seq() para saber que se puede hacer. Después crea una secuencia de 100 números, empezando en el numero 20 y con un incremento del 0.5**
+
+```{r}
+seq(from=20, by=0.5, length.out=100)
+```
+
+## **Investiga si existen vectores en R definidos para los siguientes casos: letras, minúsculas, letras mayúsculas, nombre de los meses del año y nombre de los meses del año abreviado**
+
+```{r}
+print('Minúsculas')
+letters
+print('Mayúsculas')
+LETTERS
+print('Meses')
+month.name
+print('Meses abreviados')
+month.abb
+```
+
+## **Investiga la función rep() con la ayuda. Crea una secuencia que contenga los valores del 1 al 8 repetidos cinco veces.**
+
+```{r}
+rep(1:8, each=5)
+```
+
+## **Crea una secuencia que contenga las cuatro primeras letras del abecedario 6 veces.**
+
+```{r}
+rep(letters[1:4], each=6)
+```
+
+# **Vectores y manipulación de vectores**
+
+## **Crea los siguientes vectores utilizando el comando c(): un vector del 1 al 20, un vector del 20 al 1 y un vector que tenga el siguiente patrón 1, 2, 3, ..., 19, 20, 19, 18, ..., 2, 1**
+
+```{r}
+c(1:20)
+c(20:1)
+c(1:20, 19:1)
+```
+
+## **Genera un vector x que contenga 9 números comprendidos entre 1 y 5**
+
+```{r}
+c(rep(1:5, length.out=9))
+```
+
+## **Busca que hace la función sequence(). ¿Cual es la diferencia con la función seq()**
+Mientras que seq genera una secuencia cualquiera en la que se puede especificar el inicio, el fin y el paso, en sequence se recibe como un argumento un vector como por ejempo c(2, 3) y generaría la siguiente secuencia por cada elemento del vector desde 1 "1 2 1 2 3"
+
+
+## **Crea el vector numérico x <- c(2.3, 3.3, 4.4)y accede al segundo elemento del vector**
+
+```{r}
+x <- c(2.3, 3.3, 4.4)
+print(x[2])
+```
+
+## **Crea un vector numérico “z” que contenga del 1 al 10. Cambia la clase del vector forzando que sea de tipo carácter. ¿qué pasa si vuelves a poner z en la terminal?. Ahora cambia el vector z a numérico de nuevo**
+
+```{r}
+z <- c(1:10)
+zAsCharacter <- as.character(z)
+z
+zAsCharacter
+originalZ <- as.numeric(zAsCharacter)
+originalZ
+```
+
+## **Crea un vector x con 100 elementos, selecciona de ese vector una muestra al azar de tamaño 5. Quizás quieres averiguar que hace la función sample(). Investiga opciones de extraer valores con y sin remplazo.**
+
+```{r}
+x <- c(1:100)
+firstSample <- sample(x, size=5, replace = FALSE)
+firstSample
+secondSample <- sample(x, size=5, replace=TRUE)
+secondSample
+```
+
+## **Genera un vector de enteros “integer” con 100 números entre el 1 y el 4 de forma aleatoria. Para ello mira en la ayuda la función runif().**
+
+```{r}
+randomIntegers <- floor(runif(100, min=1, max=4))
+```
+## **Ordena el vector por tamaño usando la función sort(). ¿Qué devuelve la función sort()?**
+
+```{r}
+sort(randomIntegers)
+```
+
+## **Si quisieras invertir el orden de los elementos del vector que función utilizarías.**
+
+```{r}
+sort(randomIntegers, decreasing=TRUE)
+```
+
+## **Ahora busca en la ayuda la función order(). Aplicala sobre el vector x <- c(2.3, 3.3, 4.4) que hemos generado en los ejercicios anteriores. ¿Cuál es la diferencia con la función sort()?**
+Order devuelve las posiciones de cada elemento en las que deberia de estar. Mientras que sort te devuelve el vector ordenado.
+
+
+```{r}
+z <- c(2.3, 3.3, 4.4)
+order(z)
+```
+
+## **Crea un vector x que contenga dos veces los números ordenados del 1 al 10. Investiga la función rep(). Una vez comprobado que funciona elimina las entradas repetidas del vector, para ello consulta la función unique()**
+
+```{r}
+x <- rep(1:10, 2)
+print(x)
+unique(x)
+```
+
+
+
+# Explora el indexado de Vectores
+
+## **Ejecuta los siguientes comandos y comprueba su resultado**
+```{r}
+x <- 1:10 # Genera una secuencia del 1 al 10
+names(x) <- letters[x] # Los nombres de las columnas son las 10 primeras letras minúsculas del abecedario
+x[1:3] # Muestra los primeros tres elementos
+x[c(1,10)] # Muestra la primera y décima posición
+x[c(-1,-2)] # Muestra todos los elementos menos el primer y segundo elemento
+x[ x > 5] # Muestra aquellos elementos que son mayor que 5
+x[c("a","d")] # Muestra aquellos elementos que tienen como nombre de columna "a" y "d"
+x[] # Muestra todo el vector
+x <- 1:10; y <- c(x[1:5],99,x[6:10]); y # Crea una secuencia del 1 al 10. Crea un vector y que tiene los primeros 5 elementos de x, le añade un 99 y añade el resto del vector x´
+```
+
+
+
+## **Crea un vector x con números del 1 al 100. Extrae los valores del 2 al 23, del mismo vector x extrae ahora todos los valores menos del 2:23 y cambia el número en la posición 5 por el valor 99**
+
+```{r}
+x <- c(1:100)
+
+# Extraer valores del 2 al 23
+x[2:23]
+
+# Extraer todos los valores menos del 2 al 23
+x[-c(2:23)]
+
+# Cambiar el valor de la posición 5 por 99
+x[5] <- 99
+print(x)
+```
+
+## **Crea un vector lógico del vector letters, (e.g. comprobando si existe c en el vector letters) **
+
+```{r}
+letters == c("c")
+```
+
+## **¿Qué devuelve el siguiente comando? which(rep(letters,2)=="c")**
+Devuelve los índices en los que la condición es TRUE
+
+```{r}
+which(rep(letters,2)=="c")
+```
+
+## **¿Qué devuelve el siguiente comando? match(c("c","g"), letters)**
+
+Devuelve los índices de los primeros match de los valores del primer vector en el segundo vector
+
+```{r}
+match(c("c","g"), letters)
+```
+
+# **Crea un vector x de elementos -5 -1, 0, 1, . . . , 6. Escribe un código en R del tipo x['algo'], para extraer: elementos de x menores que 0, elementos de x menores o igual que 0, elementos of x mayor o igual que 3, elementos de x menor que 0 o mayor que 4, elementos de x mayor que 0 y menor que 4, y elementos de x distintos de cero**
+
+```{r}
+x <- c(-5, -1:6)
+
+# Elementos de x menores que 0
+x[x < 0]
+
+# Elementos de x menores o igual que 0
+x[x <= 0]
+
+# Elementos de x mayores o igual que 3
+x[x >= 3]
+
+# Elementos de x menor que 0 o mayor que 4
+x[x < 0 | x > 4]
+
+# Elementos de x mayor que 0 y menor que 4
+x[x > 0 & x < 4]
+
+# Elementos de x distintos de 0
+x[x != 0]
+
+```
+
+## **El código is.na se usa para identificar valores ausentes (NA). Crea el vector x<- c(1,2,NA) y averigua que pasa cuando escribes is.na(x). Prueba con x[ x!=NA ] ¿obtienes con este comando los “missing values” de x?. ¿cuál es tu explicación?**
+
+```{r}
+x <- c(1, 2, NA)
+
+# Devuelve un vector de booleanos. En las posiciones en las que haya TRUE, significa que en esa posición hay un valor ausente
+is.na(x)
+
+# Devuelve todo NA. Recomienda utilizar is.na
+x[ x!=NA ]
+
+# Esto es lo mismo que hace la última línea. En este caso devuelve los valores que no son NA
+x[!is.na(x)]
+```
+## **Crea un vector de valores según la fórmula**
+$$ e^{x}cos(x) $$
+at x = 3, 3.1, 3.2, ..., 6
+
+```{r}
+x <- seq(from=3, to=6, by=0.1)
+exp(x)*cos(x)
+```
+
+
+## **Calcula la siguiente sumatoria**
+
+$$ \sum_{i=10}^{100} (i^{3} + 4i^{2})  $$
+
+```{r}
+i <- c(10:100)
+sum(i**3 + 4*(i**2))
+```
+
+
+## **Crea los vectores. Selecciona las variables de yVec >600, utiliza la función which ¿Cuáles son las posiciones de yVec >600?, ¿Qué posiciones de xVec son idénticas a las posiciones >600 de yVec?, ¿Cuántos números de xVec son divisibles por 2? ¿Cuanto vale su suma?, Ordena los numeros de xVec en orden creciente según los valores de yVec.**
+
+
+```{r}
+# TODO: Preguntar profesora
+set.seed(50)
+xVec <- sample(0:999, 250, replace=TRUE)
+yVec <- sample(0:999, 250, replace=TRUE)
+
+# Selecciona las variables de yVec > 600
+yVec[yVec > 600]
+
+# Posiciones de las variables de yVec > 600
+which(yVec > 600)
+
+# Numeros de xVec divisibles por 2
+divisibleByTwo <- xVec[xVec %% 2 == 0]
+length(divisibleByTwo)
+
+# Sumatorio de los numeros divisibles por 2
+sum(divisibleByTwo)
+
+```
+
+
+# **Búsqueda de valores idénticos y distintos en Vectores**
+
+## **Haz la intersección de dos vectores month.name[1:4] y  month.name[3:7] usando la función intersect()**
+
+```{r}
+# It will output the third and fourth month
+
+firstSetMonths <- month.name[1:4]
+secondSetMonths <- month.name[3:7]
+
+intersect(firstSetMonths, secondSetMonths)
+```
+## **Recupera los valores idénticos entre dos vectores usando %in%. Esta función devuelve un vector lógico de los elementos idénticos. Utiliza posteriormente el vector lógico generado para poder extraer ese subset del vector original.**
+
+```{r}
+booleanVector <- firstSetMonths %in% secondSetMonths
+
+firstSetMonths[booleanVector]
+```
+
+## **Si x= month.name[1:4] e y= month.name[3:7] recupera los valores únicos en el primer vector. Para ello investiga la función diff(). ¿Es posible usar diff() con caracteres?. Busca una alternativa. Pista: busca funciones que contengan diff en el nombre. Comprueba si importa el orden en el que se pongan los vectores en la función.**
+
+
+```{r}
+# Non numeric argument to binary operator error
+diff(c(firstSetMonths, secondSetMonths))
+
+# Devuelve los valores diferentes del primer vector
+setdiff(firstSetMonths, secondSetMonths)
+
+# Devuelve los valores diferentes del segundo vector
+setdiff(secondSetMonths, firstSetMonths)
+```
+
+
+## **Une dos vectores sin duplicar las entradas repetidas en uno nuevo llamado x. Investiga la función unión()**
+
+```{r}
+x <- union(firstSetMonths, secondSetMonths)
+```
+
+## **Recupera las entradas duplicadas de x**
+
+```{r}
+intersect(firstSetMonths, secondSetMonths)
+```
+
+
+# **Filtrado de Vectores, subset(), which(), ifelse()**
+
+## R permite extraer elementos de un vector que satisfacen determinadas condiciones usando la función subset(), la diferencia entre esta función y el filtrado normal es como funciona con NA, subset() los elimina automáticamente del cálculo. Para el vector x <- c(6,1:3,NA,12)calcula los elementos mayores que 5 en x usando primero el filtrado normal es decir con el operador “>” y luego la función subset(). ¿Se obtiene el mismo resultado?
+
+```{r}
+x <- c(6, 1:3, NA, 12)
+
+# filtrado con el operador >. Devuelve los valores mayores que 5 y con el valor NA
+x[x > 5]
+
+# Filtrado con la función subset. Subset elimina los NA "For ordinary vectors, the result is simply x[subset & !is.na(subset)]"
+subset(x, x > 5)
+
+```
+
+## **R permite extraer encontrar las posiciones en las que se encuentran los elementos que cumplen una determinada condición con which(). Utiliza esta función para encontrar dado el vector z, las posiciones donde el cuadrado de z sea mayor que 8**
+
+```{r}
+z <- c(1, 2, 3, 4, 5)
+
+which(z**2 > 8)
+```
+
+## **En R aparte de encontrarse los típicos bucles if-then-else existe la función ifelse(). Ifelse funciona de la siguiente manera (ver ejemplo). Para un vector x devuelve 5 para aquellos números que sean pares (módulo igual a 0) y 12 para los números impares.**
+
+```{r}
+y <- c(1:4)
+
+ifelse(y %% 2 == 0, 5, 12)
+
+```
+
+## **Práctica ahora para el vector x <- c(5,2,9,12) y crea un código que devuelva el doble de x si el valor de x es mayor que 6 y el triple si no lo es.**
+
+```{r}
+x <- c(5,2,9,12)
+
+ifelse(x > 6, x*2, x*3)
+
+```
+
+# Matrices
+
+## **Ejecuta los siguientes comandos y observa que pasa**
+
+```{r}
+
+# Se creará un matriz de 2x2 con cincos
+matrix(data=5, nr=2, nc=2)
+
+# Se creará una matriz 2x3 que se rellena con la secuencia 1:6(1, 2, 3, 4, 5, 6) por columnas
+matrix(1:6, 2, 3)
+
+# Se creará una matriz 2x3 que se rellena con la secuencia 1:6(1, 2, 3, 4, 5, 6) por filas
+matrix(1:6, 2, 3, byrow = T)
+```
+
+## **Crea un vector z con los 30 primeros números y crea con el una matriz M con 3 filas y 10 columnas. Extrae la tercera columna de M en un vector**
+
+```{r}
+z <- c(1:30)
+
+M <- matrix(z, 3, 10)
+
+thirdRow <- M[3,]
+thirdRow
+```
+
+
+## **calcula los efectos de los siguientes comandos sobre la anterior matriz**
+
+```{r}
+# Devuelve la primera fila
+M[1, ]
+
+# Devuelve la segunda fila
+M[2,]
+
+# Devuelve la segunda columa
+M[,2]
+
+# Devuelve el elemento situado en la fila 1 y columna 2
+M[1, 2]
+
+# Devuelve la columna 2 y 3
+M[, 2:3]
+```
+
+## **Crea un array de 5 x 5 y rellénalo con valores del 1 al 25.**
+
+```{r}
+newArray <- array(1:25, c(5, 5))
+```
+
+## **Dadas las matrices  m1 y m2 usa rbind() y cbind() para crear matrices nuevas. ¿En que se diferencian las matrices creadas?**
+
+```{r}
+m1 <- matrix(1, nr = 2, nc = 2)
+m2 <- matrix(2, nr = 2, nc = 2)
+
+# Anexiona las dos matrices a nivel de fila
+rbind(m1, m2)
+
+# Anexiona las dos matrices a nivel de columna
+cbind(m1, m2)
+
+```
+
+## **El operador para el producto de dos matrices es ‘ %* %’. Por ejemplo, considerando las dos matrices creadas en el ejercicio anterior utilízalo.**
+
+```{r}
+newMatrix <- m1 %*% m2
+newMatrix
+```
+
+## **La transposición de una matriz se realiza con la función t; esta función también funciona con marcos de datos. Prueba con la matriz M del ejercicio anterior**
+
+```{r}
+t(M)
+```
+
+## **La función diag() se puede usar para extraer o modificar la diagonal de una matriz o para construir una matriz diagonal. Comprueba las diferencias entre los siguientes comandos.**
+
+```{r}
+# Crea una matriz de 3 filas y 5 columnas cuya diagonal principal está llena de 2.1
+diag(2.1, nr=3, nc=5)
+
+# Extrae la diagonal principal de la matriz resultante de la multiplación de dos matrices
+diag(rbind(m1, m2) %*% cbind(m1, m2))
+
+# Sustituye la diagonal de la matriz m1 por 10s
+diag(m1) <- 10
+
+# Crea una matriz identidad de 3 filas y 3 columnas
+diag(3)
+
+# Crea una matriz cuyo número de filas y columnas es la longitud del vector y su diagonal es el vector
+diag(c(10, 20, 30))
+```
+
+
+
