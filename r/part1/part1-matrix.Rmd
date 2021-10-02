@@ -1,0 +1,107 @@
+---
+title: "Ejercicios Matrices"
+output: html_notebook
+---
+
+# Matrices
+
+**Crea los siguientes vectores:**
+
+```{r}
+# Box office Star Wars: In Millions (!)  First element: US, Second element:
+# Non-US
+
+new_hope = c(460.998007, 314.4)
+empire_strikes = c(290.475067, 247.9)
+return_jedi = c(309.306177, 165.8)
+```
+
+**Los datos se corresponden con las ventas en millones de la trilogía de la guerra de las galaxias. El primer numero corresponde a las ventas en US y el segundo al resto de países. Recuerda que el decimal en los países anglosajones se expresa con un “.”**
+
+**a) Construye la matriz star_wars_matrix con esos vectores**
+
+```{r}
+star_wars_matrix = rbind(new_hope, empire_strikes, return_jedi)
+```
+
+
+**b) Añadele nombres a las columnas y filas de la matriz según las descripciones dadas anteriormente de los datos**
+
+```{r}
+dimnames(star_wars_matrix) <- list(c("new_hope", "empire_strikes", "return_jedi"), c("US", "Non US"))
+```
+
+
+**c) Calcula las ganancias mundiales de cada película y guardalas en un vector que se llame worldwide_vector**
+
+```{r}
+worldwide_vector <- as.vector(rowSums(star_wars_matrix))
+```
+
+
+**d) Añade este último vector como una columan nueva a la matriz star_Wars_matrix y asigna el resultado a all_Wars_matrix. Usa para ello la función cbind()**
+
+```{r}
+star_wars_matrix <- cbind(star_wars_matrix, worldwide_vector)
+```
+
+
+**e) Calcula las ganancias totales en USA y fuera de USA para las tres películas. Puedes usar para ello la función colSums()**
+
+```{r}
+colSums(star_wars_matrix)[3]
+```
+
+**f) Calcula la media de ganancias para todas las películas fuera de los estados unidos. Asigna esa media la variable non_us_all**
+
+```{r}
+non_us_all <- mean(star_wars_matrix[, 'Non US'])
+```
+
+
+**g) Haz lo mismo pero solo para las dos primeras películas. Asigna el resultado a la variable non_us_some**
+
+```{r}
+non_us_some <- mean( star_wars_matrix[-3, 'Non US'])
+```
+
+
+**h) Calcula cuantos visitantes hubo para cada película en cada área geográfica. Ya tienes las ganancias totales en start_Wars_matrix. Asume que el precio de las entradas es de cinco euros/dólares**
+
+```{r}
+visitantes <- (star_wars_matrix[, 1:2] * 1000000) / 5
+```
+
+
+# Subsetting matrices y arrays
+
+**Crea un array i <- array(c(1:10),dim=c(5,2)). ¿Que información te dan los siguientes comandos?**
+
+```{r}
+i <- array(c(1:10),dim=c(5,2))
+
+# Da el número de filas y columnas 
+dim(i)
+
+# Número de filas
+nrow(i)
+
+# Número de columnas
+ncol(i)
+```
+
+**Descárgate el fichero array_datos.txt de PRADO (Datos/):**
+
+**a) impórtalo en tu work space de R teniendo en cuenta que es un texto tabulado.**
+
+```{r}
+newFile <- read.delim('array_datos.txt', sep = '\t')
+newFile
+```
+
+**b) Después crea un documento con los mismos datos pero en formato csv en vez de tab separated.**
+
+```{r}
+write.csv(newFile, "array_datos.csv")
+```
+
