@@ -1,0 +1,422 @@
+---
+title: "Ejercicios R III"
+output: html_notebook
+---
+
+# Dataframes
+
+Algunos ejercicos han salido en otros boletines de ejercicios. En este caso, para los dataframes, utilizaré tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+
+## **Busca los datasets “beaver1” y “beaver2” que contienen información sobre la temperatura corporal de dos castores.**
+
+```{r}
+df1 <- beaver1
+df2 <- beaver2
+```
+
+**Añade una columna llamada “ID” al dataset beaver1 que tenga siempre el valor 1. De forma similar añade una columna “ID” al dataset beaver2 que tenga siempre el valor 2.**
+
+```{r}
+df1 <- df1 %>% mutate(ID = 1)
+df2 <- df2 %>% mutate(ID = 2)
+```
+
+
+**A continuación concatena de forma vertical los dos dataframes y busca el subset de datos donde ambos Castores están activos.**
+
+```{r}
+activeBeavers <- rbind(df1, df2) %>% filter(activ == 1)
+activeBeavers
+```
+
+
+
+## Vamos a trabajar con un ejemplo que viene por defecto en la instalación de R USArrests. Este data frame contiene la información para cada estado Americano de las tasas de criminales (por 100.000 habitantes). Los datos de las columnas se refieren a Asesinatos, violaciones y porcentaje de la población que vive en áreas urbanas. Los datos son de 1973. Contesta a las siguientes preguntas sobre los datos
+
+**Las dimensiones del dataframe**
+
+```{r}
+dim(USArrests)
+```
+
+
+**La longitud del dataframe (filas o columnas) **
+
+```{r}
+nrow(USArrests)
+ncol(USArrests)
+```
+
+
+**Numero  de columnas**
+
+```{r}
+ncol(USArrests)
+```
+
+**¿Cómo calcularías el número de filas?**
+
+```{r}
+nrow(USArrests)
+```
+
+**échale un vistazo a los datos, por ejemplo a las seis primeras filas**
+
+```{r}
+USArrests %>% slice(1:6)
+```
+
+
+**Ordena de forma decreciente las filas de nuestro data frame según el porcentaje de población en el área urbana.**
+
+```{r}
+USArrests %>% arrange(desc(UrbanPop))
+```
+
+
+**¿Podrías añadir un segundo criterio de orden?, ¿cómo?**
+
+```{r}
+USArrests %>% arrange(desc(UrbanPop), Murder)
+```
+
+
+**Muestra por pantalla la columna con los datos de asesinato**
+
+```{r}
+USArrests %>% select(Murder)
+```
+
+**Muestra las tasas de asesinato para el segundo, tercer y cuarto estado **
+
+```{r}
+USArrests %>% select(Murder) %>% slice(2:4)
+```
+
+**Muestra las primeras cinco filas de todas las columnas**
+
+```{r}
+USArrests %>% slice(1:5)
+```
+
+
+**Muestra todas las filas para las dos primeras columnas**
+
+```{r}
+USArrests %>% select(1:2)
+```
+
+**Muestra todas las filas de las columnas 1 y 3**
+
+```{r}
+USArrests %>% select(c(1,3))
+```
+
+**Muestra solo las primeras cinco filas de las columnas 1 y 2**
+
+```{r}
+USArrests %>% select(1:2) %>% slice(1:5)
+```
+
+**Extrae las filas para el índice Murder**
+
+```{r}
+USArrests %>% select(Murder)
+```
+
+**¿Que estado tiene la menor tasa de asesinatos? ¿qué línea contiene esa información?**
+
+```{r}
+USArrests %>% slice(which.min(Murder))
+```
+
+**¿Que estados tienen una tasa inferior al 4%?, obtén esa información?**
+
+```{r}
+USArrests %>% filter(Murder < 4)
+```
+
+**¿Que estados están en el cuartil superior (75) en lo que a población en zonas urbanas se refiere?**
+
+```{r}
+USArrests %>% filter(ntile(UrbanPop, 4) == 4)
+```
+
+## Carga el set de datos CO2 y realiza las siguientes acciones
+
+**a. Ordena alfabéticamente los datos en función de la variable Plant. Recuerda que Plant es un factor. Imprime el resultado por pantalla para comprobarlo**
+
+```{r}
+CO2 %>% arrange(as.vector(Plant))
+```
+
+**b. Ordena los datos en función del incremento de la variable uptake y el orden alfabético de la planta (en ese orden)**
+
+```{r}
+CO2 %>% arrange(uptake, as.vector(Plant))
+```
+
+**c. Ordena de nuevo los datos en function del increment de la variable uptake y el orden alfabético reverso de la planta (en ese orden)**
+
+```{r}
+CO2 %>% arrange(uptake, desc(as.vector(Plant)))
+```
+
+
+## Para este ejercicio vamos a usar el dataset state.x77. Asegurate de que el objeto es un dataframe, si no lo es fuerza su conversión.
+
+```{r}
+x77 <- as.data.frame(state.x77)
+```
+
+**Averigua cuantos estados tienen ingresos (Income) menores de 4300.**
+
+```{r}
+x77 %>% filter(Income < 4300)
+x77 %>% filter(Income < 4300) %>% summarise(number_states = n())
+```
+
+**Averigua cual es el estado con los ingresos mas altos.**
+
+```{r}
+x77 %>% slice(which.max(Income))
+```
+
+**Crea un data frame 2 df2 con los datasets existentes en R: state.abb, state.area, state.division, state.name, state.region. Las filas tienen que ser los nombres de los estados.**
+
+```{r}
+df2 <- data.frame(state.name, state.abb, state.area, state.division, state.region, row.names = 1)
+```
+
+**Elimina de todas las variables la palabra state.**
+
+```{r}
+df2 <- df2 %>% rename_with(~ gsub("state.", "", .x))
+```
+
+**Borra la variable div de df2**
+
+```{r}
+df2 <- df2 %>% mutate(division = NULL)
+```
+
+**Añade por columnas el nuevo dataframe df2 al dataframe state.x77. Elimina las variables Life Exp, HS Grad, Frost, abb, y are.**
+
+```{r}
+x77 <- x77 %>% mutate(`Life Exp`= NULL, `HS Grad` = NULL, Frost = NULL, region = df2$region)
+```
+
+**Añade una variable que categorice el nivel de formacion (illiteracy) de manera que [0,1) is low, [1,2) is some, [2, inf) is high.**
+
+```{r}
+x77 <- x77 %>% mutate(IlliteracyCat = cut(Illiteracy, c(0:2, Inf), right = F))
+```
+
+**Encuentra que estado del oeste (west) tiene la formación mas baja y los mayors ingresos. ¿Que estado es?**
+
+```{r}
+x77 %>% filter(region =="West") %>% arrange(desc(Illiteracy), desc(Income)) %>% slice(1)
+```
+
+
+## Crea un dataframe df with 40 columns, as follows:
+
+```{r}
+df <- as.data.frame(matrix(sample(1:5, 2000, T), ncol=40))
+```
+
+**a) Ordena el dataframe por columnas, de izquierda a derecha en orden creciente**
+
+**b) Ordena el dataframe por columnas, de izquierda a derecha en orden decreciente**
+
+**c) Ordena el dataframe por columnas, de derecha a izquierda en orden creciente**
+
+
+
+## **Descarga el fichero student.txt de la plataforma PRADO, almacena la información en una variable llamada “students”. Ten en cuenta que los datos son tab-delimited y tienen un texto para cada columna. Comprueba que R ha leído correctamente el fichero imprimiendo el objeto en la pantalla**
+
+```{r}
+students <- read_tsv('student.txt', show_col_types = FALSE)
+students
+```
+
+**Imprime solo los nombres de la columnas**
+
+```{r}
+names(students)
+```
+
+**Llama a la columna height solo**
+
+```{r}
+students %>% select(height)
+```
+
+**¿Cuantas observaciones hay en cada grupo?**
+
+```{r}
+table(students$height)
+```
+
+
+**Vamos a crear una variable nueva “sym” que contenga M si el genero es masculino y F si el genero es femenino. Busca en la ayuda información sobre la función ifelse(). Crea una segunda variable “colours” cuyo valor será “Blue” si el estudiante es de kuopio y “Red” si es de otro sitio.**
+
+```{r}
+students <- students %>% mutate(
+  sym = ifelse(gender == "male", "M", "F"),
+  colours = ifelse(population == "kuopio", "Blue", "Red")
+)
+```
+
+**Con los datos anteriores de height y shoesize y las nuevas variables crea un nuevo data.frame que se llame students.new**
+
+```{r}
+students.new <- students %>% select(height, shoesize, sym, colours)
+```
+
+
+**Comprueba que la clase de student.new es un dataframe**
+```{r}
+str(students.new)
+```
+
+**Crea dos subsets a partir del dataset student. Dividelo dependiendo del sexo. Para ello primero comprueba que estudiantes son hombres (male). Pista: busca información sobre la función which.**
+
+```{r}
+students %>% filter(sym == "M")
+students %>% filter(sym == "F")
+```
+
+**Basándote en esa selección dada por which() toma solo esas filas del dataset student para generar el subset stundent.male**
+
+```{r}
+student.male <- students %>% filter(sym == "M")
+```
+
+
+**Repite el procedimiento para seleccionar las estudiantes mujeres (females)**
+```{r}
+student.female <- students %>% filter(sym == "F")
+```
+
+**Utiliza la function write.table() para guarder el contenido de student.new en un archivo.**
+
+```{r}
+write.table(students.new, "table_students.txt")
+```
+
+
+# Lists
+
+## Ejecuta los comandos y describe que es lo que ocurre
+
+```{r}
+# Crea una lista con la variable name, wife, no.children y child.ages
+my_list <- list(name="Fred", wife="Mary", no.children=3, child.ages=c(4,7,9))
+
+# Imprime los atributos de la lista anterior
+attributes(my_list)
+
+# Imprime los nombres de la lista anterior
+names(my_list) 
+
+# Devuelve una lista que tiene una string llamada wife con valor Mary
+my_list[2]
+
+# Devuelve el segundo elemento de la lista
+my_list[[2]]
+
+# Devuelve el elemento wife de la lista
+my_list$wife
+
+# Devuelve el segundo elemento del vector que se encuentra en la cuarta posición de la lista
+my_list[[4]][2]
+
+# Devuelve la longitud del vector localizado en la cuarta posición de la lista
+length(my_list[[4]]) 
+
+# Modifica la variable wife por una secuencia de enteros desde el 1 hasta el 12
+my_list$wife <- 1:12 
+
+# Borra el elemento wife de la lista. Ahora la longitud de la lista es de 3
+my_list$wife <- NULL
+
+# Se crea una lista producto de la combinación de la lista actual y una lista nueva que tiene un atributo llamado my_title2 que contiene los nombres de los meses del año
+my_list <- c(my_list, list(my_title2=month.name[1:12]))
+
+# Convierte la lista en un vector de caracteres
+unlist(my_list)
+
+# Convierte la lista en un data frame con 17 filas, cada una correspondiendose con los atributos que había en la lista y una columna en la que se encuentra el valor de esos
+# atributos
+data.frame(unlist(my_list))
+
+# Convierte la lista en una matriz de 17x1 en la que se encuentra los valores de cada atributo guardado
+matrix(unlist(my_list))
+```
+
+
+# table()
+
+**La función  table() cuenta el numero de elementos repetidos en un vector. Es la función más básica de clustering. Cuenta el numero de entradas idénticas en la variable  Sepal.Length del dataset iris.**
+
+```{r}
+anotherDataframe <- as.data.frame(table(iris$Sepal.Length))
+
+anotherDataframe %>% filter(Freq > 1) %>% summarise(entradasIdenticas = n())
+```
+
+# Como ordenar datos, hacer selecciones con if(), calcular condicionales totales, transponer columnas y filas
+
+## Vamos a volver a utilizar el datasets mtcars.
+
+```{r}
+copyCars <- mtcars
+class(copyCars)
+```
+
+**Ordena este data set de forma ascendente según su valo de hp**
+
+```{r}
+copyCars %>% arrange(hp)
+```
+
+**Hazlo ahora de forma descendente**
+
+```{r}
+copyCars %>% arrange(desc(hp))
+```
+
+**Calcula la media de mpg para aquellos datos cuyo valor de hp sea menor que 150 y por separado para aquellos cuyo valor de hp sea mayor o igual a 150**
+
+```{r}
+copyCars %>% filter(hp < 150) %>% summarise(mediaMenor150_mpg = mean(mpg, na.rm = T))
+copyCars %>% filter(hp > 150) %>% summarise(mediaMayor150_mpg = mean(mpg, na.rm = T))
+```
+
+**Busca los valores únicos de la columna cyl de mtcars.**
+
+```{r}
+unique(copyCars$cyl)
+```
+
+**Obten los datos de mpg cyl disp hp para “Toyota Corolla"**
+
+```{r}
+copyCars <- copyCars %>% rownames_to_column(var = "Car")
+copyCars
+
+copyCars %>% filter(Car == "Toyota Corolla") %>% select(mpg, cyl, disp, hp)
+```
+
+**Crea una nueva variable mpgClass de tipo categórico cuyo valor es “Low“ si el valor de mpg es menor que la media de la columna mpg y “High” si es mayor que la media de mpg.**
+
+```{r}
+copyCars <- copyCars %>% mutate(mpgClass = ifelse(mpg < mean(mpg), "Low", "High"))
+copyCars
+```
