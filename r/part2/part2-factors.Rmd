@@ -1,0 +1,108 @@
+---
+title: "Ejercicios día 2 factores"
+output: html_notebook
+---
+
+# Factors
+
+**Dado x = c(1, 2, 3, 3, 5, 3, 2, 4, NA), ¿cuáles son los levels de factor(x)?**
+
+Los levels son 1, 2, 3, 4, 5
+
+```{r}
+x <- c(1, 2, 3, 3, 5, 3, 2, 4, NA)
+
+factor(x)
+```
+
+
+**Dado x <- c(11, 22, 47, 47, 11, 47, 11) y la ejecución de la sentencia factor(x, levels=c(11, 22, 47), ordered=TRUE). ¿cuál es el cuarto elemento de la salida? **
+
+El cuarto elemento es 
+
+```{r}
+x <- c(11, 22, 47, 47, 11, 47, 11)
+
+factor(x, levels=c(11, 22, 47), ordered=TRUE)
+```
+
+
+**Para el factor z <- c("p", "a" , "g", "t", "b"), reemplaza el tercer elemento de z por "b".**
+
+La sintáxis correcta es z[3] <- "b"
+
+```{r}
+z <- c("p", "a" , "g", "t", "b")
+
+z[3] <- "b"
+```
+
+**Dado z <- factor(c("p", "q", "p", "r", "q")) escribe una expresión de R que cambie el level  "p" a "w"**
+
+```{r}
+z <- factor(c("p", "q", "p", "r", "q"))
+
+levels(z) <- c("w", "q", "r")
+```
+
+**Usa el dataset"iris"**
+
+**a) escribe la expresión necesaria para convertir la variable “Sepal.Length”  en un factor con cinco niveles (levels) . Pista (mira la función table() y la función cut().**
+
+He utilizado table para ver el conteo de frecuencias de la variable Sepal.Lenght. Teniendo en cuenta esas frecuencias, he utilizado la función cut para poder convertir una variable numérica en categórica utilizando rangos. Los rangos escogidos son (4,5] (5,6] (6,7] (7,8].
+
+```{r}
+library(datasets)
+
+irisCopy <- iris
+
+table(irisCopy$Sepal.Length)
+
+irisCopy$Sepal.Length <- cut(irisCopy$Sepal.Length, c(4, 4.9, 6, 7, 8))
+
+str(irisCopy$Sepal.Length)
+
+```
+
+**Escribe la expresión necesaria para generar una tabla de frecuencias con dos filas y tres columnas. Las filas deben referirse a si la variable “Sepal.length” es menor que 5 y las columnas a las diferentes especies. El resultado debe ser:**
+
+```{r}
+lessOrEqualThanFiveandSetosa <- nrow(irisCopy[irisCopy$Sepal.Length == "(4,4.9]" & irisCopy$Species == "setosa",])
+MoreThanFiveandSetosa <- nrow(irisCopy[irisCopy$Sepal.Length != "(4,4.9]" & irisCopy$Species == "setosa",])
+
+lessOrEqualThanFiveandVersicolor <- nrow(irisCopy[irisCopy$Sepal.Length == "(4,4.9]" & irisCopy$Species == "versicolor",])
+MoreThanFiveandVersicolor <- nrow(irisCopy[irisCopy$Sepal.Length != "(4,4.9]" & irisCopy$Species == "versicolor",])
+
+lessOrEqualThanFiveandVirginica <- nrow(irisCopy[irisCopy$Sepal.Length == "(4,4.9]" & irisCopy$Species == "virginica",])
+MoreThanFiveandVirginica <- nrow(irisCopy[irisCopy$Sepal.Length != "(4,4.9]" & irisCopy$Species == "virginica",])
+
+summaryTable <- cbind(
+  c(MoreThanFiveandSetosa, lessOrEqualThanFiveandSetosa),
+  c(MoreThanFiveandVersicolor, lessOrEqualThanFiveandVersicolor),
+  c(MoreThanFiveandVirginica, lessOrEqualThanFiveandVirginica)
+)
+
+dimnames(summaryTable) <- list(c('FALSE', 'TRUE'), c('setosa', 'versicolor', 'virginica'))
+summaryTable
+
+```
+
+**El factor responses se define como: responses <- factor(c("Agree", "Agree", "Strongly Agree","Disagree", "Agree")), sin embargo nos damos cuenta que tiene un nuevo nivel, "Strongly Disagree", que no estaba presente cuando se creó. Añade el nuevo nivel al factor y conviértelo en un factor ordenado. Debe quedar de la siguiente forma:Levels: Strongly Agree < Agree < Disagree < Strongly Disagree**
+
+```{r}
+responses <- factor(c("Agree", "Agree", "Strongly Agree","Disagree", "Agree"))
+
+responses <- factor(responses, levels = c("Strongly Agree", "Agree", "Disagree", "Strongly Disagree"), ordered = T)
+
+responses
+```
+
+
+**Dado el factor: x <- factor(c("high","low","medium","high","high","low","medium")) escribe la expresión en R que permita dar valores numéricos únicos para los distintos niveles (levels) de x según el siguiente esquema: level high   => value 1, level low => value 2, level medium => value 3**
+
+```{r}
+x <- factor(c("high","low","medium","high","high","low","medium"))
+x <- factor(x, levels = c("high", "medium", "low"), labels = c(1, 2, 3))
+
+x
+```
