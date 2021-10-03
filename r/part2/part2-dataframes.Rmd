@@ -245,7 +245,165 @@ subset(hflights, hflights$Month == 1 & hflights$DayofMonth == 1)
 **Busca los vuelos que están solo operados por American Airlines (AA) o por United Airlines (UA)**
 
 ```{r}
+hflights
 subset(hflights, hflights$UniqueCarrier %in% c('AA', 'UA'))
 ```
 
+**Crea un nuevo dataframe con las variables vuelo, hora de salida, hora de llegada y número de vuelo**
 
+```{r}
+resumedDataframe <- data.frame(hflights$AirTime, hflights$DepTime, hflights$ArrTime, hflights$FlightNum)
+```
+
+
+**Selecciona la variable vuelo y aquellas que contengan la palabra “Taxi” o ”Delay”**
+
+```{r}
+nameCols <- colnames(hflights)
+hflights[, nameCols[nameCols == "AirTime" | grepl("Taxi", nameCols) | grepl("Delay", nameCols)]]
+```
+
+**Crea una tabla que contenga el Unique carrier y el retraso de salida solo para aquellos vuelos con un retraso superior a una hora (60 minutos) ordenados de forma decreciente.**
+
+```{r}
+anotherFrame <- subset(hflights, hflights$DepDelay > 60, c("UniqueCarrier", "DepDelay"))
+anotherFrame[order(anotherFrame$DepDelay, decreasing = T),]
+```
+
+
+**Crea una nueva variable que se llame mph y que se calcula como la distancia/tiempo en el aire**
+
+```{r}
+copyHflights <- hflights
+
+copyHflights$mph <- copyHflights$Distance / (copyHflights$ActualElapsedTime / 60)
+```
+
+
+**Crea una nueva tabla organizada por destino y que para destino ponga la media de los retrasos en la llegada**
+
+```{r}
+aggregate(
+  . ~ Dest,
+  data=hflights[!is.na(hflights$Dest) & !is.na(hflights$ArrDelay), c("Dest", "ArrDelay")],
+  FUN=mean
+)
+
+```
+
+**Calcula para cada compañia el minimo y el máximo de  sus retrasos en salidas y llegadas.**
+
+```{r}
+df1 <- aggregate(
+  . ~ UniqueCarrier,
+  data=hflights[, c("UniqueCarrier", "DepDelay", "ArrDelay")],
+  FUN=max,
+  na.action = na.omit
+)
+
+df2 <- aggregate(
+  . ~ UniqueCarrier,
+  data=hflights[, c("UniqueCarrier", "DepDelay", "ArrDelay")],
+  FUN=min,
+  na.action = na.omit
+)
+
+colnames(df1) <- c("UniqueCarrier", "MaxDepDelay", "MaxArrDelay")
+colnames(df2) <- c("UniqueCarrier", "MinDepDelay", "MinArrDelay")
+
+merge(df1, df2, by="UniqueCarrier", all = T)
+```
+
+**Para cada compañia calcula que dos dias del año fueron los que tuvieron más retraso. Ten encuenta que el valor mas pequeño es el primero por defecto, asi que tendras que usar “desc” para poder hacer el ranking**
+
+```{r}
+df3 <- hflights[, c("Month", "DayofMonth", "UniqueCarrier", "DepDelay", "ArrDelay")]
+
+df3$Delay <- df3$DepDelay + df3$ArrDelay
+df3[, c("DepDelay", "ArrDelay")] <- NULL
+
+df3 <- df3[!is.na(df3$Delay) & df3$Delay > 0,]
+df3 <- df3[order(df3$Delay, decreasing = T), ]
+
+delays <- Reduce(
+  rbind,
+  by(
+    df3,
+    df3$UniqueCarrier,
+    head,
+    n = 2
+  )
+)
+
+delays
+```
+
+## **Descarga el fichero student.txt de la plataforma PRADO, almacena la información en una variable llamada “students”. Ten en cuenta que los datos son tab-delimited y tienen un texto para cada columna. Comprueba que R ha leído correctamente el fichero imprimiendo el objeto en la pantalla**
+
+```{r}
+students <- read.delim('student.txt', header=T, sep='\t', row.names = NULL)
+students
+```
+
+**Imprime solo los nombres de la columnas**
+
+```{r}
+colnames(students)
+```
+
+**Llama a la columna height solo**
+
+```{r}
+students$height
+```
+
+**¿Cuantas observaciones hay en cada grupo?**
+
+```{r}
+table(students$height)
+```
+
+
+**Vamos a crear una variable nueva “sym” que contenga M si el genero es masculino y F si el genero es femenino. Busca en la ayuda información sobre la función ifelse(). Crea una segunda variable “colours” cuyo valor será “Blue” si el estudiante es de kuopio y “Red” si es de otro sitio.**
+
+```{r}
+students$sym <- ifelse(students$gender == "male", "M", "F")
+students$colours <- ifelse(students$population == "kuopio", "Blue", "Red")
+```
+
+**Con los datos anteriores de height y shoesize y las nuevas variables crea un nuevo data.frame que se llame students.new**
+
+```{r}
+students.new <- students[, c(1,2,5,6)]
+```
+
+
+**Comprueba que la clase de student.new es un dataframe**
+```{r}
+class(students.new)
+```
+
+**Crea dos subsets a partir del dataset student. Dividelo dependiendo del sexo. Para ello primero comprueba que estudiantes son hombres (male). Pista: busca información sobre la función which.**
+
+```{r}
+students[students$sym == "M",]
+students[students$sym == "F",]
+```
+
+**Basándote en esa selección dada por which() toma solo esas filas del dataset student para generar el subset stundent.male**
+
+```{r}
+student.male <- students[students$sym == "M",]
+```
+
+
+**Repite el procedimiento para seleccionar las estudiantes mujeres (females)**
+```{r}
+student.female <- students[students$sym == "F",]
+```
+
+**Utiliza la function write.table() para guarder el contenido de student.new en un archivo.**
+
+```{r}
+write.table(students.new, "table_students.txt")
+```
