@@ -232,9 +232,22 @@ df <- as.data.frame(matrix(sample(1:5, 2000, T), ncol=40))
 
 **a) Ordena el dataframe por columnas, de izquierda a derecha en orden creciente**
 
+```{r}
+df %>% arrange_all()
+```
+
 **b) Ordena el dataframe por columnas, de izquierda a derecha en orden decreciente**
 
+```{r}
+df %>% arrange_all(desc)
+```
+
 **c) Ordena el dataframe por columnas, de derecha a izquierda en orden creciente**
+
+```{r}
+vars(df)
+df %>% arrange_at(40:1)
+```
 
 
 
