@@ -4,8 +4,8 @@
 
 vyc <- function(string) {
   list(
-    vocales=gsub("[^aeiouAEIOU]", "", meow),
-    consonantes=gsub("[A|E|I|O|U|a|e|i|o|u| ]", "", meow)
+    vocales=gsub("[^aeiouAEIOU]", "", string),
+    consonantes=gsub("[A|E|I|O|U|a|e|i|o|u| ]", "", string)
   )
 }
 

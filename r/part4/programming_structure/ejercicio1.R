@@ -11,7 +11,7 @@ creciente <- function(x) {
   all(upperTriangle)  
 }
 
-x <- c(2, 1, 3, 4, 5)
+x <- c(2, 1, 3, 5, 4)
 
 if (creciente(x)) {
   print("El vector está ordenado")
