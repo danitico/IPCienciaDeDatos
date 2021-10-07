@@ -13,4 +13,4 @@ ggplot(
 ggplot(
   ex2,
   aes(x=snow.cover)
-) + geom_histogram(bins = 4) + labs(title="Histogram of snow cover", x="Snow cover")
+) + geom_histogram(bins = 6) + labs(title="Histogram of snow cover", x="Snow cover")
