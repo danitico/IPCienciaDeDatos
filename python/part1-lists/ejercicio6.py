@@ -9,7 +9,7 @@ def imprimir_matriz(matriz: List[List[int]]) -> None:
         print()
 
 def traspuesta(matriz: List[List[int]]) -> List[List[int]]:
-    return [list(column) for column in zip(*matriz)] 
+    return [list(column) for column in zip(*matriz)]
 
 matriz = [
     [1, 2],
