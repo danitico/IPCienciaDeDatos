@@ -6,6 +6,7 @@ authors = ["Daniel Ranchal <danielranchal@correo.ugr.es>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+autopep8 = "^1.5.7"
 
 [tool.poetry.dev-dependencies]
 
