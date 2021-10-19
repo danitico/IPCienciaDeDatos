@@ -3,7 +3,6 @@
 # Dado un string con varias palabras (e.g., “Esta es una frase, pero no cualquier frase.”)
 # crea un vector con cada una de las palabras del string (e.g., ["Esta","es","una","frase","pero","no","cualquier","frase"]).
 
-sentence <- "Esta es una frase pero no cualquier frase."
+sentence <- "Esta es una frase, pero no cualquier frase."
 
-strsplit(sentence, split="[ |\\.]")
-
+strsplit(gsub("[[:punct:]]+", "", sentence), split=" ")
