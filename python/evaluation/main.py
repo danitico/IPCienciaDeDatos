@@ -3,6 +3,7 @@
 import warnings
 
 import arff
+from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import uniform
@@ -33,6 +34,59 @@ Y = np.array(data[:, data.shape[1] - 1])
 
 # X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.25, random_state=42)
 
+
+pca = PCA(n_components=2)
+
+pca_x = pca.fit_transform(X)
+
+fig, ax = plt.subplots()
+
+for label, color in zip(['democrat', 'republican'], ['blue', 'red']):
+    ax.scatter(
+        pca_x[np.argwhere(Y == label), 0],
+        pca_x[np.argwhere(Y == label), 1],
+        c=color,
+        label=label
+    )
+
+ax.legend()
+plt.show()
+
+pca = PCA(n_components=2)
+
+pca_x = pca.fit_transform(X)
+
+fig, ax = plt.subplots()
+
+for label, color in zip(['democrat', 'republican'], ['blue', 'red']):
+    ax.scatter(
+        pca_x[np.argwhere(Y == label), 0],
+        pca_x[np.argwhere(Y == label), 1],
+        c=color,
+        label=label
+    )
+
+ax.legend()
+
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(projection='3d')
+
+pca_3 = PCA(n_components=3)
+
+pca_3_x = pca_3.fit_transform(X)
+
+for label, color in zip(['democrat', 'republican'], ['blue', 'red']):
+    ax1.scatter(
+        pca_3_x[np.argwhere(Y == label), 0],
+        pca_3_x[np.argwhere(Y == label), 1],
+        pca_3_x[np.argwhere(Y == label), 2],
+        c=color,
+        label=label
+    )
+
+ax1.legend()
+
+plt.show()
 
 # Grid Search
 
@@ -159,21 +213,3 @@ print("Knn")
 knn_clf = KNeighborsClassifier(n_neighbors=5, p=1)
 cross_val_knn = cross_val_score(knn_clf, X, Y, cv=10, scoring='accuracy', n_jobs=-1)
 print(cross_val_knn)
-
-
-
-
-pca = PCA(n_components=2)
-
-pca_x = pca.fit_transform(X)
-
-fig, ax = plt.subplots()
-
-ax.scatter(
-    pca_x[:, 0],
-    pca_x[:, 1],
-    c=np.where(Y == 'democrat', 'blue', 'red'),
-)
-ax.legend()
-
-plt.show()
