@@ -9,7 +9,6 @@ import numpy as np
 from scipy.stats import uniform
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
-from sklearn.impute import SimpleImputer
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -20,12 +19,6 @@ dataset_to_classify = 'data/vote.arff'
 
 arffile = arff.load(open(dataset_to_classify))
 data = np.array(arffile['data'])
-
-# Recover missing data
-data[data == None] = np.nan
-imputer = SimpleImputer(strategy='most_frequent')
-imputer.fit(data)
-data = imputer.transform(data)
 
 
 X = np.array(data[:, 0:data.shape[1] - 1])
@@ -51,22 +44,6 @@ for label, color in zip(['democrat', 'republican'], ['blue', 'red']):
 
 ax.legend()
 plt.show()
-
-pca = PCA(n_components=2)
-
-pca_x = pca.fit_transform(X)
-
-fig, ax = plt.subplots()
-
-for label, color in zip(['democrat', 'republican'], ['blue', 'red']):
-    ax.scatter(
-        pca_x[np.argwhere(Y == label), 0],
-        pca_x[np.argwhere(Y == label), 1],
-        c=color,
-        label=label
-    )
-
-ax.legend()
 
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(projection='3d')

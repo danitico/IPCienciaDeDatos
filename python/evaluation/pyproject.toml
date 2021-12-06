@@ -7,8 +7,9 @@ authors = ["Daniel Ranchal <danielranchal@correo.ugr.es>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 scikit-learn = "^1.0.1"
-liac-arff = "^2.5.0"
-matplotlib = "^3.4.3"
+jupyterlab = "^3.2.4"
+pandas = "^1.3.4"
+seaborn = "^0.11.2"
 
 [tool.poetry.dev-dependencies]
 
